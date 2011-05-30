@@ -1,0 +1,408 @@
+@charset "UTF-8";
+@media all
+{
+  .subcolumns { width: 100%; overflow:visible; }
+
+    a { cursor: pointer; }
+    ul.vlist { font-family: Geneva, Arial, Helvetica, sans-serif; font-size:80%; }
+    h6.vlist {
+        font-size:110%;
+        border-top: 0px;
+        border-bottom: 2px solid #cccccc;
+    }
+    .vlist li.active {
+       background-color:#1177bb;
+       color:#FFFFFF;
+       font-weight:bold;
+    }
+    .vlist li a:focus, .vlist li a:hover, .vlist li a:active {
+        background-color:#eeeef4;
+        color:#2299cc;
+    }
+    .vlist li {
+        cursor: pointer;
+    }
+
+    ul.artists {
+        font-family: Arial;
+        font-size: 80%;
+        display: inline;
+    }
+    ul.artists li {
+        position: relative;
+        opacity: 0.9;
+        filter:alpha(opacity=90);
+        display: inline;
+        border: 1px solid #ccc;
+        margin: 5px;
+        margin-right: 0px;
+        margin-top: 0px;
+        padding: 5px;
+/*
+        margin: 2px;
+        padding: 3px;
+*/
+        width: 90px;
+        height: 140px;
+        float: left;
+        overflow: hidden;
+    }
+    ul.artists li img {
+        padding: 0px;
+/*
+        max-height: 138px;
+        max-width: 90px;
+*/
+        max-height: 140px;
+        max-width: 90px;
+        border: 0px none;
+    }
+    ul.artists li span.s1 {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background-color: #fff;
+        color: #44f;
+        padding: 2px;
+        line-height: 12px;
+/*
+        border-right: 1px solid #888888;
+        border-bottom: 1px solid #888888;
+*/
+    }
+    ul.artists li span.s2 {
+        position: absolute;
+        bottom: 3px;
+        right: 3px;
+        left: 3px;
+        background-color: #fff;
+        top: auto;
+        padding: 1px;
+        opacity: 0.7;
+        filter:alpha(opacity=70);
+        line-height: 12px;
+        word-wrap:break-word;
+    }
+    ul.artists li span.s3 {
+        position: absolute;
+        display: none;
+        padding: 0px;
+        margin: 0px;
+        padding-top: 5px;
+        bottom: -2px;
+        left: 0px;
+        right: 0px;
+        background-color: #fff;
+    }
+    ul.artists li span.s3 a img {
+        border: 0px;
+        padding: 0px;
+        height: 16px;
+    }
+    ul.artists li:hover span.s1,
+    ul.artists li:hover span.s2 {
+        display: none;
+    }
+    ul.artists li:hover span.s3 {
+        display: inline;
+    }
+    ul.artists li:hover {
+        opacity: 1.0;
+        filter:alpha(opacity=100);
+        border: 1px solid #9999ff;
+        background-color: #f3f3f9;
+    }
+
+    thead, tbody {
+        font-family: Arial;
+        font-size: 90%;
+    }
+    thead tr th {
+        background: none;
+        color: #000;
+        border-bottom: 2px solid #1177bb;
+    }
+    tbody th {
+        background: #eeeef4;
+    }
+
+    .rad {
+        margin: 3px;
+        padding: 0px;
+    }
+
+    #video {
+        position: fixed;
+        font-family: arial;
+        height: 310px;
+        width:  240px;
+        background: #eee;
+        border: 1px solid #ccc;
+        opacity: 0.8;
+        filter:alpha(opacity=80);
+        padding: 0px;
+        margin: 0px;
+        margin-left: -15px;
+        top: -10px;
+        z-index: 15;
+    }
+    #video:hover {
+        opacity: 1.0;
+    }
+    #video div object {
+        position: absolute;
+        top: 80px;
+        right: 15px;
+    }
+    #video div span.right {
+        position: absolute;
+        bottom: 3px;
+        right: 3px;
+        font-size: 90%;
+        left: auto;
+    }
+
+    #video div span.bottom {
+        line-height: 12px;
+        position: absolute;
+        left: 5px;
+        bottom: 3px;
+        right: 35px;
+        padding: 1px;
+        height: 14px;
+        font-size: 90%;
+        background: #f4f4f4;
+        color: #333;
+        border: 1px dashed #999;
+        overflow: hidden;
+    }
+    #video div span.bottom select {
+        width: 100%;
+        background-color: none;
+        border: 0px none;
+        padding: 0px;
+        margin: 0px;
+    }
+    #header h2 small {
+        font-size: 17pt;
+        display:block;
+        margin-top: 8px;
+        margin-left: 20px;
+        line-height:10px;
+    }
+
+
+    #filter {
+        border-top: 2px solid #888;
+        width: 150px;
+/*
+        border: 1px solid #444;
+*/
+        width: 80%;
+        padding: 20px;
+        margin: 0px;
+        padding-top: 0px;
+        font-size: 8pt;
+    }
+
+    h4.filter {
+        padding: 0px;
+        margin: 0px;
+        margin-bottom: 2px;
+    }
+    h4.filter a img {
+        border: 0px none;
+        padding: 0px;
+        margin-right: 5px;
+    }
+    #filter select {
+        width: 100%;
+        background-color: none;
+        border: 1px solid #999;;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    #filter .slider {
+        width: 100%;
+        height: 9px;
+        /* background: transparent url(../../images/slide-r.png) no-repeat top right; */
+        border-bottom: 1px solid #999;
+    }
+    #filter .slider div.left {
+        position: absolute;
+        width: 5px;
+        height: 9px;
+        /* background: transparent url(../../images/slide-l.png) no-repeat top left; */
+    }
+    #filter .slider .handle {
+        width: 19px;
+        height: 20px;
+        position: relative;
+        margin-left: -5px;
+        top: -5px;
+        top: -2px;
+        margin-left: -3px;
+    }
+    #filter .slider .handle img {
+        border: 0px;
+        float: left;
+        width: 70%;
+    }
+    #filter p {
+        margin-bottom: 5px;
+        padding: 0px;
+        font-face: Arial;
+        color: #666;
+    }
+    #filter p span {
+        font-size: 9pt;
+        color: #000;
+    }
+
+    #filter p b {
+        cursor: default;
+    }
+    #filter p b:hover .tooltip {
+        position: absolute;
+        display: inline;
+    }
+    .tooltip {
+        display: none;
+        z-index: 20;
+    }
+    #filter p b .tp2 {
+        width: 150px;
+        background: white;
+        color: black;
+        border: 1px solid #888;
+        padding: 2px;
+        font-weight: normal;
+        font-family: Arial;
+        font-size: 8pt;
+    }
+    #filter p b .tp2,
+    #filter p b .tp3 {
+        width: 150px;
+        background: #f4f4f4;
+        color: black;
+        border: 1px solid #888;
+        padding: 3px;
+        font-weight: normal;
+        font-family: Arial;
+        font-size: 8pt;
+    }
+    #filter p b .tp3 {
+        width: 300px;
+    }
+    #filter p b .tp3 ul {
+        margin: 0px;
+        margin-left: 8px;
+        padding: 0px;
+    }
+
+    table {
+        line-height: 11px;
+    }
+
+    .reg {
+        position: relative;
+    }
+    .fix {
+        position: fixed;
+        bottom: 10px;
+        width: 240px;
+        z-index: 10;
+        background: #fff;
+        opacity: 0.9;
+        filter:alpha(opacity=90);
+    }
+    #stats img {
+        position: absolute;
+        border: 0px solid #000;
+        top: 2px;
+        right: 2px;
+    }
+
+    .regTop {
+        width: 500px;
+        position: fixed;
+        top: -5px;
+        margin-left: 300px;
+        z-index: 10;
+        font-face: Arial;
+        font-size: 8pt;
+        line-height: 18px;
+        background-color: #fcfcff;
+        border: 1px solid #ccc;
+        opacity: 0.90;
+        filter:alpha(opacity=90);
+        overflow: hidden;
+        cursor: move;
+    }
+    #stats div {
+/*
+        display: block-inline;
+        position: relative;
+*/
+        padding: 8px;
+        min-height: 40px;
+    }
+    #stats.regTop div table,
+    #stats.regTop div table tr,
+    #stats.regTop div table tr td {
+        border: 0px none;
+        padding-left: 0px;
+        padding-bottom: 0px;
+        margin: 0px;
+    }
+    #stats.regTop div table tr td div {
+        padding: 0px;
+        min-height: 5px;
+    }
+    #stats.regTop div table tr td span {
+        min-height: 12px;
+        height: 12px;
+    }
+
+    .regB {
+        width: 400px;
+        position: fixed;
+        top: -5px;
+        margin-left: 350px;
+        z-index: 9;
+        font-face: Arial;
+        font-size: 8pt;
+        line-height: 18px;
+        background-color: #fcfcff;
+        border: 1px solid #ccc;
+        opacity: 0.93;
+        filter:alpha(opacity=93);
+        overflow: hidden;
+        cursor: move;
+        height: auto;
+    }
+    .regB div {
+        padding: 2px;
+        min-height: 40px;
+    }
+    .regB div div.left,
+    .regB div div.right {
+        position: relative;
+        width: 30%;
+        display: inline-block;
+        margin: 3px;
+    }
+    .regB div div.right {
+        width: 60%;
+    }
+    .regB div div img {
+        position: relative;
+        width: 95%;
+        margin: 2px;
+        border: 0px none;
+    }
+
+
+}
+

@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>[earshare] explore and share.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/layout_grids2.css" rel="stylesheet" type="text/css" />
+<!--[if lte IE 7]>
+<link href="css/patches/patch_grids2.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="http://swfobject.googlecode.com/svn/trunk/swfobject/swfobject.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.3/scriptaculous.js?load=effects,slider,dragdrop"></script>
+<script>
+// <![CDATA[
+    cnum = 0;
+    function artist_open(numb) {
+        $('mii_'+numb).hide()
+        $('mia_'+numb).show()
+        $('mia_'+cnum).hide()
+        $('mii_'+cnum).show()
+        Effect.Fade(  'artists_'+cnum, {queue: {scope: 'artistxscope'} });
+        Effect.Appear('artists_'+numb, {queue: {scope: 'artistxscope', position: 'end', limit:2} });
+        cnum = numb;
+    }
+
+    function tblMove(a) {
+        cls = $('stats').className
+        if (cls=="reg") {
+            $('stats').className = "fix"
+            a.innerHTML = '<img src="images/a-down-diag-arrow-big.gif" />'
+        }
+        else {
+            $('stats').className = "reg"
+            a.innerHTML = '<img src="images/a-up-diag-arrow-big.gif" />'
+        }
+    }
+
+    function blkPar(val) {
+        if (val=="") {
+            return ""
+        }
+        else {
+            return "&nbsp;("+val+")"
+        }
+    }
+
+    function chgTbl(val) {
+        if ($('stats').style.display=="none") {
+//            new Effect.SlideDown('stats');
+              new Effect.Appear('stats');
+        }
+        $('tbl_val1').innerHTML = tbl_val0[val]
+        $('tbl_val1').href = "http://www.myspace.com/"+tbl_val1[val]
+        $('tbl_val2').innerHTML = blkPar(tbl_val2[val])
+        $('tbl_val3').innerHTML = tbl_val3[val]
+        $('tbl_val4').innerHTML = blkPar(tbl_val4[val])
+        $('tbl_val5').innerHTML = tbl_val5[val]
+        $('tbl_val6').innerHTML = tbl_val6[val]
+        $('tbl_val7').innerHTML = tbl_val7[val]
+        $('tbl_val8').morph("width:"+tbl_val8[val]+"%;")
+        $('tbl_val9').morph("width:"+tbl_val9[val]+"%;")
+        chgImg_Pts("R")
+    }
+    function chgImg_Pts(img) {
+        $('img_01').src = "http://chart.apis.google.com/chart?cht=lc&chs=180x50&chls=3,8,1&chco=FF3399&chds=100.2,101.1&chxt=y&chxl=0:|100.2|101.1&chf=a,s,EFEFEFF0&chd=t:100.3,100.5,100.7,100.9,101.1,102.0"
+    }
+
+    vidNum = new Array(0, 0);
+
+    function selVid(val) {
+        vidNum[1]=val
+        if ($('video').style.display=="none") {
+            new Effect.SlideDown('video', {queue: 'front'});
+            //new Effect.Appear('video', {queue: 'front'});
+            new Effect.Morph('filter_body', { style: 'height: 100px;' });
+            new Effect.multiple(['vidm', 'vidr', 'vidt'], Effect.Appear);
+        }
+        loadVideo.defer("http://www.youtube.com/v/"+youtube[vidNum[0]][vidNum[1]], true)
+    }
+    function loadVideo(playerUrl, autoplay) {
+        swfobject.embedSWF(
+            playerUrl + '&rel=1&border=0&fs=1&autoplay=' +
+            (autoplay?1:0), 'player', '210', '200', '9.0.0', false,
+            false, {allowfullscreen: 'true'});
+    }
+
+    currPg = ""
+    function chgIt() {
+        chgPg = ""
+        valid = 1
+        if ($('sim').value=="0") {
+            var vals = new Array('genre', 'label', 'loc', 'age', 'gdr', 'sim', 'sim', 'time')
+            for(i=0; i<vals.length; i=i+1) {
+                chgPg = chgPg + $(vals[i]).value;
+                if ($(vals[i]).value=="X") { valid=0; }
+            }
+        }
+        else {
+            var vals = new Array('genre', 'label', 'loc', 'age', 'gdr', 'sim', 'heat', 'time')
+            for(i=0; i<vals.length; i=i+1) {
+                chgPg = chgPg + $(vals[i]).value;
+                if ($(vals[i]).value=="X") { valid=0; }
+            }
+        }
+        if (chgPg!=currPg && valid==1) {
+            currPg=chgPg
+            $('artist').hide();
+            $('load').show();
+
+            //$('mainH2').innerHTML = chgPg
+
+            new Ajax.Updater('artist', "demo/"+chgPg+".asp", {
+                evalScripts: true,
+                onSuccess: function(transport) {
+                    $('load').hide()
+                    $('artist').appear()
+                }
+            });
+            //alert(chgPg)
+        }
+    }
+    function chgVid(val) {
+        vidNum[0] = val;
+        vidNum[1] = 0;
+        $('vidt').innerHTML = ""
+        if (youtube[vidNum[0]].length>0) {
+            for(i=0; i<youtube[vidNum[0]].length; i++) { /*>*/
+                AddSelOpt($('vidt'), youtitle[vidNum[0]][i], i, (i==0));
+            }
+            selVid(0);
+        }
+        else {
+            AddSelOpt($('vidt'), "No embeddable videos found.", "", true);
+        }
+    }
+    function AddSelOpt(selectObj, text, value, isSelected)
+    {
+        if (selectObj != null && selectObj.options != null)
+        {
+            selectObj.options[selectObj.options.length] =
+                new Option(text, value, false, isSelected);
+        }
+    }
+
+    function arrowChg(div, img) {
+        Effect.toggle(div, 'blind');
+        if ($(div).style.display=="") {
+            img.innerHTML = '<img src="images/a-right-arrow-big.gif"/>'
+        }
+        else {
+            img.innerHTML = '<img src="images/a-down-arrow-big.gif"/>'
+        }
+    }
+// ]]>
+</script>
+</head>
+<body>
+
+<div class="page_margins">
+  <div class="page">
+    <div id="header">
+      <div id="topnav"> <a class="skip" title="skip link" href="#content">skip to content</a><span class="hideme">.</span>
+        <a href="#">Login</a> | <a href="#">About</a>
+      </div>
+
+      <div id="video">
+          <div style="height:310px;">
+          <object id="player"
+              height="200px" width="210px"
+              type="application/x-shockwave-flash"
+              data=""
+              style="visibility: visible;">
+              <param name="allowfullscreen" value="true"/>
+          </object>
+          <span id="vidr" class="right">
+              <a onclick="new Effect.SlideUp('video', {queue: 'front'}); new Effect.Morph('filter_body', { style: 'height:0px;' });">[x]</a>
+          </span>
+          <span id="vidm" class="bottom">
+            <select id="vidt" onchange="selVid(this.value)">
+            </select>
+          </span>
+          </div>
+      </div>
+      <script>$('video').hide();</script>
+
+      <img src="images/earshare.jpg" style="border:0px;width:200px; margin-bottom: 30px;">
+      <h2 id="mainH2"></h2>
+      </div>
+    </div>
+    <div id="main">
+      <div class="subcolumns">
+        <div>
+
+          <div class="subcolumns">
+            <div class="c25l">
+              <div class="subcl" style="height: 800px;">
+                <div id="filter_body"></div>
+                <h4 class="filter">
+                    <a onclick="arrowChg('filter', this);">
+                        <img src="images/a-down-arrow-big.gif"/>
+                    </a>Let's Explore</h4>
+                <div id="filter">
+                    <p><b>Genre:<span class="tooltip tp2">Genres are artist classified.</span></b></p>
+                    <select id="genre" onchange="chgIt()">
+                        <option value="38">Rock</option>
+                        <option value="21,35,36">Hip Hop, Rap, R&amp;B</option>
+                        <option value="28">Pop</option>
+                        <option value="2,23,34">Alternative, Indie, Punk</option>
+                    </select>
+                    <p><b>Time:<span class="tooltip tp2">Time span to analyze social web momentum ("heat").</span></b> <span id="time_cap"><span style='color:#aaa'>1 week</span></span></p>
+                    <input type="hidden" id="time" value="1">
+                    <div id="time_slide" class="slider">
+                        <div class="left"></div>
+                        <div class="handle"><img src="images/slider-handle.png" alt=""></div>
+                    </div>
+                    <p><b>Label:<span class="tooltip tp2">Signed includes Major and Indies.  Unsigned may include previously signed artists.</span></b></p>
+                    <input type="hidden" id="label" value="S">
+                    <input type="radio" onclick="$('label').value=this.value; chgIt();" class="rad" name="signed" value="S" checked="checked" />Signed
+                    <input type="radio" onclick="$('label').value=this.value; chgIt();" class="rad" name="signed" value="N" />Unsigned<br />
+                    <input type="radio" onclick="$('label').value=this.value; chgIt();" class="rad" name="signed" value="" />All artists!
+                    <br /><br />
+                    <p><b>Region:<span class="tooltip tp3">Northeast<br/>&nbsp;&nbsp;New England - ME, NH, VT, MA, RI, CT<br/>&nbsp;&nbsp;Mid-Atlantic - NY, PA, NJ<br/><br/>Midwest<br/>&nbsp;&nbsp;E. North Central - WI, MI, IL, IN, OH<br/>&nbsp;&nbsp;W. North Central - ND, SD, NE, KS, MN, IA, MO<br/><br/>South<br/>&nbsp;&nbsp;S. Atlantic - DE, MD, DC, VA, WV, NC, SC, GA, FL<br/>&nbsp;&nbsp;E. South Central - KY, TN, MS, AL<br/>&nbsp;&nbsp;W. South Central - OK, TX, AR, LA<br/><br/>West<br/>&nbsp;&nbsp;Mountain - ID, MT, WY, NV, UT, CO, AZ, NM<br/>&nbsp;&nbsp;Pacific - AK, WA, OR, CA, HI</span></b></p>
+                    <select id="loc" onchange="chgIt()">
+                        <option value="">National</option>
+                        <option value="MA">Northeast (New England)</option>
+                        <option disabled="disabled" value="MI">Midwest (East North Central)</option>
+                        <option disabled="disabled" value="FL">South (South Atlantic)</option>
+                        <option value="CA">West (Pacific)</option>
+                    </select>
+                    <p><b>Age:<span class="tooltip tp2">All ranges include:<br/>13-15, 16-19, 20-23, 24-27, 28-30, 31-35, 36-40, 41-45, 46-50, 51-55, 56-60, 61-65.</span></b>
+                    <span id="age_cap">24-27</span></p>
+                    <input type="hidden" id="age" value="24">
+                    <div id="age_slide" class="slider">
+                        <div class="left"></div>
+                        <div class="handle"><img src="images/slider-handle.png" alt=""></div>
+                    </div>
+                    <p><b>Gender:<span class="tooltip tp2">Entities such as corporations, brands and musicians may not specify gender.</span></b></p>
+                    <input type="hidden" id="gdr" value="M">
+                    <input type="radio" onclick="$('gdr').value=this.value; chgIt();" class="rad" name="gdr" value="M" checked="checked" />Male
+                    <input type="radio" onclick="$('gdr').value=this.value; chgIt();" class="rad" name="gdr" value="F" />Female
+                    <input type="radio" onclick="$('gdr').value=this.value; chgIt();" class="rad" name="gdr" value="" />Both!
+                    <br /><br />
+                    <p><b>Boost:<span class="tooltip tp2">Give artists an additional <b>boost</b> for stronger demographic matches and social web precense.</span></b> <span id="sim_cap">10%</span></p>
+                    <input type="hidden" id="sim" value="10">
+                    <div id="sim_slide" class="slider">
+                        <div class="left"></div>
+                        <div class="handle"><img src="images/slider-handle.png" alt=""></div>
+                    </div>
+                    <p><b>Match, Heat:<span class="tooltip tp2">What should make up the score boost?  Demographic <b>match</b> OR  Social web <b>heat</b>?</span></b> <span id="heat_cap">50%, 50%</span></p>
+                    <input type="hidden" id="heat" value="50">
+                    <div id="heat_slide" class="slider">
+                        <div class="left"></div>
+                        <div class="handle"><img src="images/slider-handle.png" alt=""></div>
+                    </div>
+                </div>
+                <br /><br />
+                <div id="stats" class="regTop">
+                    <div>
+                        <a href="" id="tbl_val1" target="_blank">Artist</a><span id="tbl_val2"> (Location)</span> | <span id="tbl_val3">Genre</span><span id="tbl_val4"> (Label)</span><br />
+                        friends: <span id="tbl_val5">friends</span>, messages: <span id="tbl_val6">messages</span>, profile views: <span id="tbl_val7">profile views</span>
+                        <table>
+                            <tr><td>match</td><td width="200px"><div id="tbl_val8" style="width:0%; background: #55aaff;">&nbsp;</div></td><td width="5px"></td>
+                                <td>heat</td> <td width="200px"><div id="tbl_val9" style="width:0%; background: #55aaff;">&nbsp;</div></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <script>$('stats').hide();</script>
+              </div>
+            </div>
+            <div class="c75r">
+                <div id='artist'></div>
+                <div id='load' style="display: none;"><img style="border: 0px none;" src="images/load.gif"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <h2></h2>
+      <p>Visit us | <a href="http://www.earshare.com/">earshare</a>.</p>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+// <![CDATA[
+    new Draggable('stats');
+    chgIt();
+    tr1 = $('age_slide');
+    tr2 = $('time_slide');
+    tr3 = $('sim_slide');
+    tr4 = $('heat_slide');
+    Event.observe(document, 'mousemove', function(event){
+        if (event.findElement().childElements()[0].hasClassName("tooltip")) {
+            //alert("RON")
+            event.findElement().childElements()[0].setOpacity(0.9);
+            event.findElement().childElements()[0].setStyle('left:'+(-5+Event.pointerX(event))+'px; top:'+(30+Event.pointerY(event))+'px;')
+        }
+    });
+    new Control.Slider(tr1.down('.handle'), tr1, {
+        sliderValue: 26,
+        range: $R(10,70),
+        onSlide:  function(v) { ValGet(v, "age"); },
+        onChange: function(v) { ValGet(v, "age"); }
+    });
+    new Control.Slider(tr2.down('.handle'), tr2, {
+        sliderValue: 1,
+        range: $R(1,7),
+        onSlide:  function(v) { ValGet(v, "time"); },
+        onChange: function(v) { ValGet(v, "time"); }
+    });
+    new Control.Slider(tr3.down('.handle'), tr3, {
+        sliderValue: 10,
+        range: $R(0,20),
+        values: [0,5,10,15,20],
+        onSlide:  function(v) { ValGet(v, "sim"); },
+        onChange: function(v) { ValGet(v, "sim"); }
+    });
+    new Control.Slider(tr4.down('.handle'), tr4, {
+        sliderValue: 50,
+        range: $R(0,100),
+        values: [0,25,50,75,100],
+        onSlide:  function(v) { ValGet(v, "heat"); },
+        onChange: function(v) { ValGet(v, "heat"); }
+    });
+    function ValGet(vl, typ) {
+        vl = parseInt(vl)
+        chgVal = 1;
+        if (typ=="age") {
+            if (10<=vl && vl<20)      { $(typ).value="13"; $(typ+"_cap").innerHTML="13-15" }
+            else if (20<=vl && vl<34) { $(typ).value="24"; $(typ+"_cap").innerHTML="24-27" }
+            else if (34<=vl && vl<53) { $(typ).value="41"; $(typ+"_cap").innerHTML="41-45" }
+            else                      { $(typ).value="61"; $(typ+"_cap").innerHTML="61-65" }
+        }
+        else if (typ=="time") {
+            if (1<=vl && vl<4)        { $(typ).value="X";  $(typ+"_cap").innerHTML="<span style='color:#aaa'>1 week</span>";  }
+            else                      { $(typ).value="X";  $(typ+"_cap").innerHTML="<span style='color:#aaa'>1 month</span>"; chgVal=0; }
+        }
+        else if (typ=="sim") {
+            if (0==vl || 10==vl || vl==20)  { $(typ).value=vl;   $(typ+"_cap").innerHTML=vl+"%" }
+            else                            { $(typ).value="X";  $(typ+"_cap").innerHTML="<span style='color:#aaa'>"+vl+"%</span>"; chgVal=0; }
+        }
+        else if (typ=="heat") {
+            if (0==vl || vl==50 || vl==100) { $(typ).value=vl;   $(typ+"_cap").innerHTML=vl+"%, "+(100-vl)+"%" }
+            else                            { $(typ).value="X";  $(typ+"_cap").innerHTML="<span style='color:#aaa'>"+vl+"%, "+(100-vl)+"%</span>"; chgVal=0; }
+        }
+        if (chgVal==1) {
+            chgIt();
+        }
+    }
+    var tbl_val0 = new Array()
+    var tbl_val1 = new Array()
+    var tbl_val2 = new Array()
+    var tbl_val3 = new Array()
+    var tbl_val4 = new Array()
+    var tbl_val5 = new Array()
+    var tbl_val6 = new Array()
+    var tbl_val7 = new Array()
+    var tbl_val8 = new Array()
+    var tbl_val9 = new Array()
+    var tbl_val10 = new Array()
+    var youtube = new Array(new Array())
+    var youtitle = new Array(new Array())
+// ]]>
+</script>
+
+</body>
+</html>
